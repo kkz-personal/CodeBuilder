@@ -1,6 +1,6 @@
 ﻿package ${tdo.packageName}.dao;
 
-import com.test.commons.mybatis.data.CrudRepository;
+import codebuilder.commons.CrudRepository;
 import ${tdo.packageName}.bo.${tdo.name};
 import ${tdo.packageName}.bo.example.${tdo.name}Example;
 import org.springframework.stereotype.Repository;

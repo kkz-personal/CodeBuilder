@@ -1,6 +1,6 @@
 ﻿package ${tdo.packageName}.data;
 
-import com.test.commons.mybatis.sharding.data.CrudRepository;
+import codebuilder.commons.CrudRepository;
 import ${tdo.packageName}.domain.${tdo.name};
 import ${tdo.packageName}.domain.example.${tdo.name}Example;
 import org.springframework.stereotype.Repository;
