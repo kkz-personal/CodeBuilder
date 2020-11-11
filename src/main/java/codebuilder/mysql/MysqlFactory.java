@@ -5,6 +5,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,7 +35,8 @@ public class MysqlFactory {
     static {
         try {
             Properties properties = new Properties();
-            properties.load(new FileInputStream("src/main/resources/datasource.properties"));
+            ClassPathResource classPathResource = new ClassPathResource("/datasource.properties");
+            properties.load(classPathResource.getInputStream());
             driverClass = properties.getProperty("jdbc.driverClassName");
             url = properties.getProperty("jdbc.url");
             userName = properties.getProperty("jdbc.username");
@@ -61,7 +63,9 @@ public class MysqlFactory {
     }
 
     public static MysqlFactory getInstance() {
-        helper = new MysqlFactory(url, userName, passWord, database);
+        if (helper == null){
+            helper = new MysqlFactory(url, userName, passWord, database);
+        }
         return helper;
     }
 
@@ -125,9 +129,10 @@ public class MysqlFactory {
 
     public List<Element> getTypeMapper() {
         SAXReader reader = new SAXReader();
-        String file = "src/main/resources/TypeMapping.xml";
+        String file = "TypeMapping.xml";
+        ClassPathResource classPathResource = new ClassPathResource(file);
         try {
-            Document document = reader.read(file);
+            Document document = reader.read(classPathResource.getInputStream());
             List<Element> elems = document.selectNodes("/typeMappingSection/typeMappings/typeMapping");
             for (Element element : elems) {
                 if (typeMapping.equals(element.attributeValue("name")) && databaseType.equals(element.attributeValue("database"))
@@ -135,7 +140,7 @@ public class MysqlFactory {
                     return element.elements();
                 }
             }
-        } catch (DocumentException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
