@@ -1,0 +1,30 @@
+﻿package ${tdo.packageName}.data;
+
+import com.test.commons.mybatis.sharding.data.CrudRepository;
+import ${tdo.packageName}.domain.${tdo.name};
+import ${tdo.packageName}.domain.example.${tdo.name}Example;
+import org.springframework.stereotype.Repository;
+
+#set($isAutoIncremented = false)
+#foreach($column in $tdo.columns)
+	#if($column.autoIncremented == true)
+		#set($keyColumn = $column)
+		#set($isAutoIncremented = true)
+	#end
+#end
+#if(!$isAutoIncremented)
+	#foreach($column in $tdo.columns)
+		#if($column.primaryKey)
+			#set($keyColumn = $column)
+		#end
+	#end
+#end
+/**
+ * $tdo.modelContent 数据访问类
+ * @author $tdo.author
+ * @date $tdo.date
+ */
+@Repository
+public interface ${tdo.name}Repository
+    extends CrudRepository<${tdo.name}, ${tdo.name}Example, ${keyColumn.fieldType}> {
+}
