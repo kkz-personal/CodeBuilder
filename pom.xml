@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.code.code-builder</groupId>
-    <artifactId>com.code.code-builder</artifactId>
+    <artifactId>code-builder</artifactId>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->

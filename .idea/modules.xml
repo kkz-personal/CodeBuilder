@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CodeBuilder.iml" filepath="$PROJECT_DIR$/CodeBuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/code-builder.iml" filepath="$PROJECT_DIR$/code-builder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/com.code.code-builder.iml" filepath="$PROJECT_DIR$/com.code.code-builder.iml" />
     </modules>
   </component>
 </project>
