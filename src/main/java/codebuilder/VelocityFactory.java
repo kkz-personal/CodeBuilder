@@ -9,6 +9,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +31,7 @@ import static jdk.nashorn.internal.codegen.OptimisticTypesPersistence.load;
 @Log4j
 public class VelocityFactory {
     private static Properties properties;
-    private static String templateConfig = "src/main/resources/templateconfig.properties";
+    private static String templateConfig = "templateconfig.properties";
 
     static {
         //配置velocity的资源加载路径
@@ -44,7 +45,8 @@ public class VelocityFactory {
 
         try {
             properties = new Properties();
-            properties.load(new FileInputStream(templateConfig));
+            ClassPathResource classPathResource = new ClassPathResource(templateConfig);
+            properties.load(classPathResource.getInputStream());
         } catch (IOException e) {
             throw new RuntimeException("load template config error", e);
         }
