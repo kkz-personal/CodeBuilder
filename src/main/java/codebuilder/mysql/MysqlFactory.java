@@ -6,6 +6,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,8 +37,9 @@ public class MysqlFactory {
     static {
         try {
             Properties properties = new Properties();
-            ClassPathResource classPathResource = new ClassPathResource("/datasource.properties");
-            properties.load(classPathResource.getInputStream());
+            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+            Resource resource = defaultResourceLoader.getResource("datasource.properties");
+            properties.load(resource.getInputStream());
             driverClass = properties.getProperty("jdbc.driverClassName");
             url = properties.getProperty("jdbc.url");
             userName = properties.getProperty("jdbc.username");
