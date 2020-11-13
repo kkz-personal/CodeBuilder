@@ -44,12 +44,12 @@ public class VelocityFactory {
         velocityPros.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
         velocityPros.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
         Velocity.init(velocityPros);
+    }
 
+    VelocityFactory(String path) {
         try {
             properties = new Properties();
-            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-            Resource resource = defaultResourceLoader.getResource(templateConfig);
-            properties.load(resource.getInputStream());
+            properties.load(new FileInputStream(path + templateConfig));
         } catch (IOException e) {
             throw new RuntimeException("load template config error", e);
         }

@@ -34,12 +34,19 @@ public class MysqlFactory {
     private static String databaseType;
     private static String language;
 
-    static {
+    private MysqlFactory(String url, String user, String pwd, String dbName) {
+        this.dbName = dbName;
+        try {
+            Class.forName(driverClass);
+            connection = DriverManager.getConnection(url, user, pwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void init(String path){
         try {
             Properties properties = new Properties();
-            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-            Resource resource = defaultResourceLoader.getResource("datasource.properties");
-            properties.load(resource.getInputStream());
+            properties.load(new FileInputStream(path + "datasource.properties"));
             driverClass = properties.getProperty("jdbc.driverClassName");
             url = properties.getProperty("jdbc.url");
             userName = properties.getProperty("jdbc.username");
@@ -55,18 +62,9 @@ public class MysqlFactory {
         }
     }
 
-    private MysqlFactory(String url, String user, String pwd, String dbName) {
-        this.dbName = dbName;
-        try {
-            Class.forName(driverClass);
-            connection = DriverManager.getConnection(url, user, pwd);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static MysqlFactory getInstance() {
-        if (helper == null){
+        if (helper == null) {
+
             helper = new MysqlFactory(url, userName, passWord, database);
         }
         return helper;
