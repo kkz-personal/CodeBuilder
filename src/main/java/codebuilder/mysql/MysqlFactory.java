@@ -6,13 +6,13 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @author maozhi.k
@@ -38,10 +38,10 @@ public class MysqlFactory {
     public static void init(String path) {
         try {
             Properties properties = new Properties();
-//            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
-//            Resource resource = defaultResourceLoader.getResource("datasource.properties");
-//            properties.load(resource.getInputStream());
-            properties.load(new FileInputStream(path + "datasource.properties"));
+            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+            Resource resource = defaultResourceLoader.getResource("datasource.properties");
+            properties.load(resource.getInputStream());
+//            properties.load(new FileInputStream(path + "datasource.properties"));
             driverClass = properties.getProperty("jdbc.driverClassName");
             url = properties.getProperty("jdbc.url");
             userName = properties.getProperty("jdbc.username");
@@ -137,21 +137,26 @@ public class MysqlFactory {
         return columnList;
     }
 
-    public List<Element> getTypeMapper() {
+    public Map<String, List<Element>> getTypeMapper() {
+        Map<String, List<Element>> eMap = new HashMap<>();
         SAXReader reader = new SAXReader();
-        String file = "src/main/resources/TypeMapping.xml";
+        String file = "TypeMapping.xml";
+        ClassPathResource classPathResource = new ClassPathResource(file);
         try {
-            Document document = reader.read(file);
+            Document document = reader.read(classPathResource.getInputStream());
             List<Element> elems = document.selectNodes("/typeMappingSection/typeMappings/typeMapping");
             for (Element element : elems) {
                 if (typeMapping.equals(element.attributeValue("name")) && databaseType.equals(element.attributeValue("database"))
                         && language.equals(element.attributeValue("language"))) {
-                    return element.elements();
+                    eMap.put("java", element.elements());
+                } else if (mapperTypeMapping.equals(element.attributeValue("name")) && mapperDatabaseType.equals(element.attributeValue("database"))
+                        && mapperLanguage.equals(element.attributeValue("language"))) {
+                    eMap.put("mapper", element.elements());
                 }
             }
-        } catch (DocumentException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
-        return new ArrayList<>();
+        return eMap;
     }
 }

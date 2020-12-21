@@ -2,11 +2,13 @@ package codebuilder.mysql;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author maozhi.k
@@ -58,7 +60,7 @@ public class Column {
         char[] fieldNameChars = this.fieldName.toCharArray();
         fieldNameChars[0] -= 32;
         this.methodFieldName = String.valueOf(fieldNameChars);
-        this.fieldType = transformColumnType(columnType);
+        transformColumnType(columnType);
         this.comment = comment;
         this.autoIncremented = autoIncremented;
         this.primaryKey = primaryKey;
@@ -75,16 +77,34 @@ public class Column {
         return stringBuilder.toString();
     }
 
-    String transformColumnType(String columnType) {
-        List<Element> list = MysqlFactory.getInstance().getTypeMapper();
-        for (Element element : list) {
+    void transformColumnType(String columnType) {
+        Map<String,List<Element>> typeMapper = MysqlFactory.getInstance().getTypeMapper();
+        String defaultJdbcType = "";
+        String defaultType="";
+        for (Element element : typeMapper.get("mapper")) {
             String type = element.attributeValue("name");
             if (columnType.startsWith(type)) {
-                this.jdbcType = type.equalsIgnoreCase("int") ? "INTEGER" : type.toUpperCase();
+                this.jdbcType = element.attributeValue("langtype");
                 this.fieldTypeAlias = element.attributeValue("alias");
-                return element.attributeValue("langtype");
+            }
+            if ("default".equalsIgnoreCase(type)){
+                defaultJdbcType = element.attributeValue("langtype");
             }
         }
-        return columnType;
+        for (Element element : typeMapper.get("java")) {
+            String type = element.attributeValue("name");
+            if (columnType.startsWith(type)) {
+                this.fieldType = element.attributeValue("langtype");
+            }
+            if ("default".equalsIgnoreCase(type)){
+                defaultType = element.attributeValue("langtype");
+            }
+        }
+        if (StringUtils.isEmpty(this.jdbcType)){
+            this.jdbcType = defaultJdbcType;
+        }
+        if (StringUtils.isEmpty(this.fieldType)){
+            this.fieldType = defaultType;
+        }
     }
 }

@@ -7,9 +7,9 @@
   					 <id column="id" property="id" jdbcType="INTEGER" />
 							<result column="price" property="price" jdbcType="DOUBLE" />
 							<result column="name" property="name" jdbcType="VARCHAR" />
-							<result column="description" property="description" jdbcType="TEXT" />
-							<result column="modify_date" property="modifyDate" jdbcType="DATETIME" />
-							<result column="create_date" property="createDate" jdbcType="DATETIME" />
+							<result column="description" property="description" jdbcType="LONGVARCHAR" />
+							<result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+							<result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
 							<result column="worker" property="worker" jdbcType="VARCHAR" />
 			  </resultMap>
   <sql id="Example_Where_Clause">
@@ -60,17 +60,17 @@
     <sql id="Insert_Values">
     							<if test="record.price != null">#{record.price,jdbcType=DOUBLE},</if>
 							<if test="record.name != null">#{record.name,jdbcType=VARCHAR},</if>
-							<if test="record.description != null">#{record.description,jdbcType=TEXT},</if>
-							<if test="record.modifyDate != null">#{record.modifyDate,jdbcType=DATETIME},</if>
-							<if test="record.createDate != null">#{record.createDate,jdbcType=DATETIME},</if>
+							<if test="record.description != null">#{record.description,jdbcType=LONGVARCHAR},</if>
+							<if test="record.modifyDate != null">#{record.modifyDate,jdbcType=TIMESTAMP},</if>
+							<if test="record.createDate != null">#{record.createDate,jdbcType=TIMESTAMP},</if>
 							<if test="record.worker != null">#{record.worker,jdbcType=VARCHAR},</if>
 			    </sql>
     <sql id="Batch_Insert_Values">
 								 #{record.price,jdbcType=DOUBLE},
 		 					 #{record.name,jdbcType=VARCHAR},
-		 					 #{record.description,jdbcType=TEXT},
-		 					 #{record.modifyDate,jdbcType=DATETIME},
-		 					 #{record.createDate,jdbcType=DATETIME},
+		 					 #{record.description,jdbcType=LONGVARCHAR},
+		 					 #{record.modifyDate,jdbcType=TIMESTAMP},
+		 					 #{record.createDate,jdbcType=TIMESTAMP},
 		 					 #{record.worker,jdbcType=VARCHAR},
 		 	    </sql>
 	<sql id="Batch_Insert_Values_On_DuplicateKey">
@@ -80,14 +80,14 @@
     <sql id="Update_Set_From_Bean">
 	 							<if test="record.price != null">price = #{record.price,jdbcType=DOUBLE} ,</if>
 							<if test="record.name != null">name = #{record.name,jdbcType=VARCHAR} ,</if>
-							<if test="record.description != null">description = #{record.description,jdbcType=TEXT} ,</if>
-							<if test="record.modifyDate != null">modify_date = #{record.modifyDate,jdbcType=DATETIME} ,</if>
-							<if test="record.createDate != null">create_date = #{record.createDate,jdbcType=DATETIME} ,</if>
+							<if test="record.description != null">description = #{record.description,jdbcType=LONGVARCHAR} ,</if>
+							<if test="record.modifyDate != null">modify_date = #{record.modifyDate,jdbcType=TIMESTAMP} ,</if>
+							<if test="record.createDate != null">create_date = #{record.createDate,jdbcType=TIMESTAMP} ,</if>
 							<if test="record.worker != null">worker = #{record.worker,jdbcType=VARCHAR} ,</if>
 			    </sql>
 	<!-- insert -->
 	<insert id="insert" parameterType="java.util.Map">
-				<selectKey resultType="" keyProperty="record.id" order="AFTER">
+				<selectKey resultType="java.lang.Integer" keyProperty="record.id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
 		        insert into <include refid="Table_Name"/>

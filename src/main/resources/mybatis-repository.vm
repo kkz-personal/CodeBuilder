@@ -1,4 +1,4 @@
-﻿package ${tdo.packageName}.dao;
+package ${tdo.packageName}.dao;
 
 import codebuilder.commons.CrudRepository;
 import ${tdo.packageName}.bo.${tdo.name};

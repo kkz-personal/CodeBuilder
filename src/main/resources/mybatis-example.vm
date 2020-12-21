@@ -1,4 +1,4 @@
-﻿package ${tdo.packageName}.bo.example;
+package ${tdo.packageName}.bo.example;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,4 +1,4 @@
-﻿package ${tdo.packageName}.data;
+package ${tdo.packageName}.data;
 
 import codebuilder.commons.CrudRepository;
 import ${tdo.packageName}.domain.${tdo.name};
