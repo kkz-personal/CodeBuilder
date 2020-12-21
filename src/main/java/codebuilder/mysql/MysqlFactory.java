@@ -31,12 +31,17 @@ public class MysqlFactory {
     private static String typeMapping;
     private static String databaseType;
     private static String language;
+    private static String mapperDatabaseType;
+    private static String mapperLanguage;
+    private static String mapperTypeMapping;
 
-    static {
+    public static void init(String path) {
         try {
             Properties properties = new Properties();
-            ClassPathResource classPathResource = new ClassPathResource("datasource.properties");
-            properties.load(classPathResource.getInputStream());
+//            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+//            Resource resource = defaultResourceLoader.getResource("datasource.properties");
+//            properties.load(resource.getInputStream());
+            properties.load(new FileInputStream(path + "datasource.properties"));
             driverClass = properties.getProperty("jdbc.driverClassName");
             url = properties.getProperty("jdbc.url");
             userName = properties.getProperty("jdbc.username");
@@ -46,6 +51,11 @@ public class MysqlFactory {
             databaseType = properties.getProperty("database.type");
             typeMapping = properties.getProperty("typeMapping");
             language = properties.getProperty("language");
+
+            mapperDatabaseType = properties.getProperty("mapper.database.type");
+            mapperLanguage = properties.getProperty("mapper.language");
+            mapperTypeMapping = properties.getProperty("mapper.typeMapping");
+            ;
         } catch (IOException e) {
             log.error("load database properties error.", e);
             e.printStackTrace();
@@ -63,7 +73,7 @@ public class MysqlFactory {
     }
 
     public static MysqlFactory getInstance() {
-        if (helper == null){
+        if (helper == null) {
             helper = new MysqlFactory(url, userName, passWord, database);
         }
         return helper;
