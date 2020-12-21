@@ -10,6 +10,8 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,11 +44,15 @@ public class VelocityFactory {
         velocityPros.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
         velocityPros.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
         Velocity.init(velocityPros);
-
+    }
+    VelocityFactory(String path) {
         try {
             properties = new Properties();
-            ClassPathResource classPathResource = new ClassPathResource(templateConfig);
-            properties.load(classPathResource.getInputStream());
+            DefaultResourceLoader defaultResourceLoader = new DefaultResourceLoader();
+            Resource resource = defaultResourceLoader.getResource(templateConfig);
+            properties.load(resource.getInputStream());
+            //打成fat jar时可以使用相对路径
+//            properties.load(new FileInputStream(path + templateConfig));
         } catch (IOException e) {
             throw new RuntimeException("load template config error", e);
         }
